@@ -1,9 +1,10 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "com.cienciaes.android",
   "appName": "cienciaes",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
+"linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
