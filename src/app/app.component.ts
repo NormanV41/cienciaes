@@ -18,14 +18,14 @@ export class AppComponent {
     private feedParser: FeedParserService
   ) {
     this.initializeApp();
-    this.feedParser.getFeed('https://cienciaes.com/feed/').subscribe(
+  /*  this.feedParser.getFeed('https://cienciaes.com/feed/').subscribe(
       (data) => {
         console.log(data);
       },
       (error) => {
         throw error;
       }
-    );
+    );*/
   }
 
   private initializeApp() {
