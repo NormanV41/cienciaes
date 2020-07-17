@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { FeedParserService } from './core/services/feed-parser.service';
+import { GetFeedsService } from './core/services/get-feeds.service';
+import { Feed } from './core/api/url';
 
 @Component({
   selector: 'app-root',
@@ -15,17 +16,10 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private feedParser: FeedParserService
+    private getFeed: GetFeedsService
   ) {
     this.initializeApp();
-  /*  this.feedParser.getFeed('https://cienciaes.com/feed/').subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) => {
-        throw error;
-      }
-    );*/
+    this.getFeed.getFeed(Feed.main).subscribe((data) => {});
   }
 
   private initializeApp() {
