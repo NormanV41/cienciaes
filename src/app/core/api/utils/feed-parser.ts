@@ -46,7 +46,8 @@ export function feedParser() {
           )
         };
         return result;
-      })
+      }),
+      tap((data) => console.log(data))
     );
   };
 }
