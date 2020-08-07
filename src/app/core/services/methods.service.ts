@@ -14,7 +14,7 @@ export class MethodsService {
 
   public parseMimeType(type: string) {
     if (type === 'audio/mp3') {
-      return MIMEType.audo;
+      return MIMEType.audio;
     }
     throw new Error('mime type not handled yet');
   }

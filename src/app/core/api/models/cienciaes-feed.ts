@@ -1,7 +1,7 @@
 import { Moment } from 'moment-timezone';
 
 export interface CienciaesFeed {
-  ttile: string;
+  title: string;
   link: string;
   description: string;
   copyright: string;
@@ -21,5 +21,5 @@ export interface CienciaesFeedItem {
 }
 
 export enum MIMEType {
-  audo = 'audo/mp3',
+  audio = 'audio/mp3'
 }

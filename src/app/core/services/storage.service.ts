@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable, defer } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 const { Storage } = Plugins;
 
@@ -12,20 +12,34 @@ export class StorageService {
   constructor() {}
 
   public set<T>(key: string, value: T) {
-    return from(Storage.set({ key, value: JSON.stringify(value) }).then());
+    return defer(() =>
+      from(Storage.set({ key, value: JSON.stringify(value) })).pipe(
+        tap(() => {
+          console.log('feed added');
+        })
+      )
+    );
   }
 
-  public get<T>(key: string): Observable<T> {
-    return from(Storage.get({ key })).pipe(
-      map((data) => JSON.parse(data.value))
+  public get<T>(key: string): Observable<T | null> {
+    return defer(() =>
+      from(Storage.get({ key })).pipe(
+        tap(() => console.log('accessing data')),
+        map((data) => {
+          if (data.value === null) {
+            return data;
+          }
+          return JSON.parse(data.value);
+        })
+      )
     );
   }
 
   public remove(key: string) {
-    return from(Storage.remove({ key }));
+    return defer(() => from(Storage.remove({ key })));
   }
 
   public clear() {
-    return from(Storage.clear());
+    return defer(() => from(Storage.clear()));
   }
 }

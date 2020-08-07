@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { GetFeedsService } from './get-feeds.service';
 import { Feed } from '../api/url';
 import { StorageService } from './storage.service';
-import { flatMap } from 'rxjs/operators';
-import { Observable, forkJoin } from 'rxjs';
+import { flatMap, tap } from 'rxjs/operators';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaveFeedService {
+  public allFeedsWasSave = new BehaviorSubject(false);
+
   constructor(
     private getFeedApi: GetFeedsService,
     private storageApi: StorageService
@@ -25,6 +27,11 @@ export class SaveFeedService {
     Object.values(Feed).forEach((el) => {
       observables.push(this.saveFeed(el));
     });
-    return forkJoin(observables);
+    return forkJoin(observables).pipe(
+      tap(() => {
+        this.allFeedsWasSave.next(true);
+        this.allFeedsWasSave.complete();
+      })
+    );
   }
 }

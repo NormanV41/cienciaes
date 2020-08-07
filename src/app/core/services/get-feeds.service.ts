@@ -8,7 +8,7 @@ import urls, { Feed } from '../api/url';
 import { feedParser } from '../api/utils/feed-parser';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class GetFeedsService {
   constructor(
@@ -21,13 +21,25 @@ export class GetFeedsService {
     if (this.platform.is('mobileweb')) {
       return this.getFeedLocalServerForBrowserTest(feed).pipe(feedParser());
     }
-    return from(this.http.get(urls.get(feed).prod, undefined, undefined)).pipe(
+    return from(
+      this.http.get(this.getFeedUrl(feed).prod, undefined, undefined)
+    ).pipe(
       map((data) => data.data),
       feedParser()
     );
   }
 
   public getFeedLocalServerForBrowserTest(feed: Feed) {
-    return this.httpClient.get(urls.get(feed).dev, { responseType: 'text' });
+    return this.httpClient.get(this.getFeedUrl(feed).dev, {
+      responseType: 'text'
+    });
+  }
+
+  public getFeedUrl(feed: Feed) {
+    const feedUrl = urls.get(feed);
+    if (!feedUrl) {
+      throw new Error('feed url should not be null');
+    }
+    return feedUrl;
   }
 }
