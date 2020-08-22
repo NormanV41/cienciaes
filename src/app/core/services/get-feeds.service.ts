@@ -19,13 +19,13 @@ export class GetFeedsService {
 
   public getFeed(feed: Feed) {
     if (this.platform.is('mobileweb')) {
-      return this.getFeedLocalServerForBrowserTest(feed).pipe(feedParser());
+      return this.getFeedLocalServerForBrowserTest(feed).pipe(feedParser(feed));
     }
     return from(
       this.http.get(this.getFeedUrl(feed).prod, undefined, undefined)
     ).pipe(
       map((data) => data.data),
-      feedParser()
+      feedParser(feed)
     );
   }
 

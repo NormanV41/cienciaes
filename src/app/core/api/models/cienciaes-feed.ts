@@ -1,6 +1,8 @@
 import { Moment } from 'moment-timezone';
+import { Feed } from '../url';
 
 export interface CienciaesFeed {
+  id: Feed;
   title: string;
   link: string;
   description: string;

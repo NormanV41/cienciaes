@@ -2,10 +2,11 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { MethodsService } from '../../services/methods.service';
 import { CienciaesFeedItem, CienciaesFeed } from '../models/cienciaes-feed';
+import { Feed } from '../url';
 
 const methods = new MethodsService();
 
-export function feedParser() {
+export function feedParser(feed: Feed) {
   return (old$: Observable<string>) => {
     return old$.pipe(
       map((data) => {
@@ -69,6 +70,7 @@ export function feedParser() {
           throw new Error('something is null');
         }
         const result: CienciaesFeed = {
+          id: feed,
           title: title.innerHTML,
           link: link.innerHTML,
           description: description.innerHTML,

@@ -5,7 +5,10 @@ import { CienciaesFeed } from '../api/models/cienciaes-feed';
 import { Feed } from '../api/url';
 import { SaveFeedService } from './save-feed.service';
 import { filter, switchMap, delay, map } from 'rxjs/operators';
-import { makeSureNoNull } from '../api/utils/make-sure-no-null';
+import {
+  makeSureNoNull,
+  makeSureNoNullForArray
+} from '../api/utils/make-sure-no-null';
 import { Filter } from '../api/models/filter';
 import { momentjsonToMoment } from '../api/utils/momentjson-to-moment';
 import { sort } from '../api/utils/sort';
@@ -32,7 +35,7 @@ export class ProgramService {
       switchMap(() => {
         return forkOfObservables$;
       }),
-      makeSureNoNull(),
+      makeSureNoNullForArray(),
       momentjsonToMoment()
     );
   }
@@ -46,5 +49,9 @@ export class ProgramService {
       result = result.pipe(limit(filterParam.limit));
     }
     return result;
+  }
+
+  public getEpisodes(id: string, filterParam: Filter) {
+    this.storage.get<CienciaesFeed>(id);
   }
 }
