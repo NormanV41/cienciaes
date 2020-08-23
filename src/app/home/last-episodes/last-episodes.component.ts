@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CienciaesFeedItem } from 'src/app/core/api/models/cienciaes-feed';
+import { ProgramService } from 'src/app/core/services/program.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-last-episodes',
@@ -11,9 +13,22 @@ export class LastEpisodesComponent implements OnInit {
   public id = '';
   public episodes: CienciaesFeedItem[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private programApi: ProgramService
+  ) {}
 
   public ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id') || '';
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (!id) {
+        throw new Error('null id not handled');
+      }
+      this.id = id;
+      this.programApi
+        .getEpisodes(this.id, { limit: 10 })
+        .pipe(tap(console.log))
+        .subscribe((data) => (this.episodes = data));
+    });
   }
 }

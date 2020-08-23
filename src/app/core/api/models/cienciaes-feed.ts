@@ -18,10 +18,16 @@ export interface CienciaesFeedItem {
   type: MIMEType;
   title: string;
   link: string;
-  description: string;
+  description: { img: ItemImage; paragraph: string };
   pubDate: Moment;
 }
 
 export enum MIMEType {
   audio = 'audio/mp3'
+}
+
+export interface ItemImage {
+  url: string;
+  class: string;
+  alt: string;
 }

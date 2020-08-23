@@ -9,8 +9,8 @@ import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SaveFeedService {
-  public allFeedsWasSave = new BehaviorSubject(false);
-
+  private _allFeedsWasSave = new BehaviorSubject(false);
+  public allFeedsWasSave = this._allFeedsWasSave.asObservable();
   constructor(
     private getFeedApi: GetFeedsService,
     private storageApi: StorageService
@@ -29,8 +29,7 @@ export class SaveFeedService {
     });
     return forkJoin(observables).pipe(
       tap(() => {
-        this.allFeedsWasSave.next(true);
-        this.allFeedsWasSave.complete();
+        this._allFeedsWasSave.next(true);
       })
     );
   }

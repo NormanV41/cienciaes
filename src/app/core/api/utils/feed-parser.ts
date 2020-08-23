@@ -1,7 +1,11 @@
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { MethodsService } from '../../services/methods.service';
-import { CienciaesFeedItem, CienciaesFeed } from '../models/cienciaes-feed';
+import {
+  CienciaesFeedItem,
+  CienciaesFeed,
+  ItemImage
+} from '../models/cienciaes-feed';
 import { Feed } from '../url';
 
 const methods = new MethodsService();
@@ -16,36 +20,9 @@ export function feedParser(feed: Feed) {
         );
         const items = Array.from(domParser.querySelectorAll('item'));
 
-        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el) => {
-          const enclosure = domParser.querySelector('enclosure');
-          if (!enclosure) {
-            throw new Error('enclosure is null');
-          }
-          const itemUrl = enclosure.getAttribute('url');
-          const itemType = enclosure.getAttribute('type');
-          const itemDescription = el.querySelector('description');
-          const itemTitle = el.querySelector('title');
-          const itemLink = el.querySelector('link');
-          const itemPubDate = el.querySelector('pubDate');
-          if (
-            itemUrl === null ||
-            itemType === null ||
-            itemDescription === null ||
-            itemTitle === null ||
-            itemLink === null ||
-            itemPubDate === null
-          ) {
-            throw new Error('something is null');
-          }
-          return {
-            url: itemUrl,
-            type: methods.parseMimeType(itemType),
-            title: itemTitle.innerHTML,
-            description: itemDescription.innerHTML,
-            link: itemLink.innerHTML,
-            pubDate: methods.parseDate(itemPubDate.innerHTML)
-          };
-        });
+        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el) =>
+          parseItem(el, domParser)
+        );
 
         const title = domParser.querySelector('title');
         const link = domParser.querySelector('link');
@@ -91,7 +68,7 @@ export function feedParser(feed: Feed) {
   };
 }
 
-export function modifyTitle() {
+function modifyTitle() {
   return (old$: Observable<CienciaesFeed>) => {
     return old$.pipe(
       map((data) => {
@@ -104,4 +81,89 @@ export function modifyTitle() {
       })
     );
   };
+}
+
+function parseItem(el: Element, domParser: Document): CienciaesFeedItem {
+  const enclosure = domParser.querySelector('enclosure');
+  if (!enclosure) {
+    throw new Error('enclosure is null');
+  }
+  const itemUrl = enclosure.getAttribute('url');
+  const itemType = enclosure.getAttribute('type');
+  const itemDescription = el.querySelector('description');
+  const itemTitle = el.querySelector('title');
+  const itemLink = el.querySelector('link');
+  const itemPubDate = el.querySelector('pubDate');
+  if (
+    itemUrl === null ||
+    itemType === null ||
+    itemDescription === null ||
+    itemTitle === null ||
+    itemLink === null ||
+    itemPubDate === null
+  ) {
+    throw new Error('something is null');
+  }
+  return {
+    url: itemUrl,
+    type: methods.parseMimeType(itemType),
+    title: itemTitle.innerHTML,
+    description: parseItemDescription(itemDescription.innerHTML),
+    link: itemLink.innerHTML,
+    pubDate: methods.parseDate(itemPubDate.innerHTML)
+  };
+}
+
+function parseItemDescription(
+  description: string
+): { img: ItemImage; paragraph: string } {
+  let url = '';
+  let imageClass = '';
+  let alt = '';
+  let paragraph = '';
+  matchWrapper(description, /(?<=<img src=").+(?=" clas)/g, (match) => {
+    url = match[0];
+  });
+  matchWrapper(description, /(?<=<img .+class=").+(?=" alt=)/g, (match) => {
+    imageClass = match[0];
+  });
+  matchWrapper(
+    description,
+    /(?<=<img .+alt=").+(?=" ?\/>)/g,
+    (match) => {
+      alt = match[0];
+    },
+    () => {
+      if (!/ alt=""/g.test(description)) {
+        console.log(description);
+        throw new Error('not handled');
+      }
+    }
+  );
+  paragraph = description.replace(/<!\[.+\/>/g, '').replace(/\]\]>/g, '');
+  if (!/<p>/g.test(paragraph)) {
+    paragraph = '<p>' + paragraph + '</p>';
+  }
+  return { img: { url, class: imageClass, alt }, paragraph };
+}
+
+function matchWrapper(
+  s: string,
+  pattern: RegExp,
+  action: (match: RegExpMatchArray) => void,
+  noMatchHandler?: () => void
+) {
+  const match = s.match(pattern);
+  if (!match && noMatchHandler) {
+    noMatchHandler();
+    return;
+  }
+
+  if (!match) {
+    console.log(s);
+    console.log(pattern);
+    throw new Error('no match');
+  }
+
+  action(match);
 }
