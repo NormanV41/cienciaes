@@ -14,6 +14,7 @@ export interface CienciaesFeed {
 }
 
 export interface CienciaesFeedItem {
+  id: string;
   url: string;
   type: MIMEType;
   title: string;

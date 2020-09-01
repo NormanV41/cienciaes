@@ -1,12 +1,15 @@
 <ion-app>
   <ion-menu side="start" menuId="mainMenu" contentId="renderContent"
-    ><ion-header
-      ><ion-toolbar><ion-title>Navigate</ion-title></ion-toolbar></ion-header
     ><ion-content
       ><ion-list
-        ><ion-menu-toggle auto-hide="true"
-          ><ion-item routerLink="/" routerDirection="root"
-            ><ion-icon name="home" slot="start"></ion-icon>Inicio</ion-item
+        ><ion-menu-toggle
+          ><ion-item
+            routerLink="/"
+            routerDirection="root"
+            detail="false"
+            routerLinkActive="active"
+            ><ion-icon name="home" slot="start"></ion-icon
+            ><ion-label>Inicio</ion-label></ion-item
           ></ion-menu-toggle
         ></ion-list
       ></ion-content

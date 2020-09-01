@@ -20,8 +20,8 @@ export function feedParser(feed: Feed) {
         );
         const items = Array.from(domParser.querySelectorAll('item'));
 
-        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el) =>
-          parseItem(el, domParser)
+        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el, index) =>
+          parseItem(el, domParser, feed, index)
         );
 
         const title = domParser.querySelector('title');
@@ -83,7 +83,12 @@ function modifyTitle() {
   };
 }
 
-function parseItem(el: Element, domParser: Document): CienciaesFeedItem {
+function parseItem(
+  el: Element,
+  domParser: Document,
+  feed: Feed,
+  index: number
+): CienciaesFeedItem {
   const enclosure = domParser.querySelector('enclosure');
   if (!enclosure) {
     throw new Error('enclosure is null');
@@ -105,6 +110,7 @@ function parseItem(el: Element, domParser: Document): CienciaesFeedItem {
     throw new Error('something is null');
   }
   return {
+    id: `${feed}-${index}`,
     url: itemUrl,
     type: methods.parseMimeType(itemType),
     title: itemTitle.innerHTML,

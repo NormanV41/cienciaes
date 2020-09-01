@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CienciaesFeedItem } from 'src/app/core/api/models/cienciaes-feed';
 import { ProgramService } from 'src/app/core/services/program.service';
 import { tap } from 'rxjs/operators';
@@ -15,7 +15,8 @@ export class LastEpisodesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private programApi: ProgramService
+    private programApi: ProgramService,
+    private router: Router
   ) {}
 
   public ngOnInit() {
@@ -30,5 +31,9 @@ export class LastEpisodesComponent implements OnInit {
         .pipe(tap(console.log))
         .subscribe((data) => (this.episodes = data));
     });
+  }
+
+  public onClick(id: string) {
+    this.router.navigate([`/program/detail/${id}`]);
   }
 }

@@ -9,8 +9,6 @@ app.use(morgan('dev'));
 
 app.use(cors());
 
-console.log(rootPath.toString());
-
 app.use(express.static(rootPath + '/data'));
 
 app.listen(3142, (error) => {

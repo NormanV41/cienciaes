@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="Regresar"></ion-back-button
+    ></ion-buttons>
+    <ion-title>Cienciaes</ion-title>
+    <ion-buttons slot="end"
+      ><ion-button routerLink="/" routerDirection="root"
+        ><ion-icon name="home"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <img
+    [src]="episode?.description.img.url"
+    [alt]="episode?.description.img.alt"
+  />
+  <h2>{{ episode?.title }}</h2>
+  <h6></h6>
+</ion-content>
