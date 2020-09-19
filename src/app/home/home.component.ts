@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProgramService } from '../core/services/program.service';
 import { CienciaesFeed } from '../core/api/models/cienciaes-feed';
-import { ActivatedRoute } from '@angular/router';
 import { IonTabs } from '@ionic/angular';
 
 @Component({
@@ -16,7 +15,7 @@ export class HomeComponent implements OnInit {
 
   public feeds: CienciaesFeed[] = [];
 
-  constructor(private programApi: ProgramService) {}
+  public constructor(private programApi: ProgramService) {}
 
   public ngOnInit() {
     this.programApi.getAll({ order: 'pubDate' }).subscribe((data) => {
@@ -34,8 +33,7 @@ export class HomeComponent implements OnInit {
   }
   private setTitle() {
     if (this.feeds.length > 0) {
-      this.title =
-        this.feeds.find((el) => el.id === this.selectedTab)?.title || '';
+      this.title = this.feeds.find((el) => el.id === this.selectedTab)?.title || '';
     }
   }
 }

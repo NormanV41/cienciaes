@@ -6,7 +6,7 @@ import { MIMEType } from '../api/models/cienciaes-feed';
   providedIn: 'root'
 })
 export class MethodsService {
-  constructor() {}
+  public constructor() {}
 
   public parseDate(date: string) {
     return tz(date, 'ddd, DD MMM YYYY HH:mm:ss zz', 'America/Costa_Rica');

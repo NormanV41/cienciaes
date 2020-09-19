@@ -9,7 +9,7 @@ describe('LastEpisodesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LastEpisodesComponent ],
+      declarations: [LastEpisodesComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

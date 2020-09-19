@@ -11,15 +11,10 @@ import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 export class SaveFeedService {
   private _allFeedsWasSave = new BehaviorSubject(false);
   public allFeedsWasSave = this._allFeedsWasSave.asObservable();
-  constructor(
-    private getFeedApi: GetFeedsService,
-    private storageApi: StorageService
-  ) {}
+  public constructor(private getFeedApi: GetFeedsService, private storageApi: StorageService) {}
 
   public saveFeed(feed: Feed) {
-    return this.getFeedApi
-      .getFeed(feed)
-      .pipe(flatMap((data) => this.storageApi.set(feed.toString(), data)));
+    return this.getFeedApi.getFeed(feed).pipe(flatMap((data) => this.storageApi.set(feed.toString(), data)));
   }
 
   public saveAllFeeds() {

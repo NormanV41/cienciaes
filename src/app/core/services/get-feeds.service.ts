@@ -11,19 +11,13 @@ import { feedParser } from '../api/utils/feed-parser';
   providedIn: 'root'
 })
 export class GetFeedsService {
-  constructor(
-    private http: HTTP,
-    private platform: Platform,
-    private httpClient: HttpClient
-  ) {}
+  public constructor(private http: HTTP, private platform: Platform, private httpClient: HttpClient) {}
 
   public getFeed(feed: Feed) {
     if (this.platform.is('mobileweb')) {
       return this.getFeedLocalServerForBrowserTest(feed).pipe(feedParser(feed));
     }
-    return from(
-      this.http.get(this.getFeedUrl(feed).prod, undefined, undefined)
-    ).pipe(
+    return from(this.http.get(this.getFeedUrl(feed).prod, undefined, undefined)).pipe(
       map((data) => data.data),
       feedParser(feed)
     );

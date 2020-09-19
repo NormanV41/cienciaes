@@ -13,7 +13,7 @@ import { StorageService } from './core/services/storage.service';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  constructor(
+  public constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,

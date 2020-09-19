@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  constructor() {}
+  public constructor() {}
 
   public ngOnInit() {}
 }

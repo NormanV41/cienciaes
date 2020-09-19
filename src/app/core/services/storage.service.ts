@@ -9,7 +9,7 @@ const { Storage } = Plugins;
   providedIn: 'root'
 })
 export class StorageService {
-  constructor() {}
+  public constructor() {}
 
   public set<T>(key: string, value: T) {
     return defer(() =>

@@ -23,13 +23,9 @@ import { ProgramModule } from './program/program.module';
     AppRoutingModule,
     SharedModule,
     CoreModule,
-    ProgramModule,
+    ProgramModule
   ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-  ],
-  bootstrap: [AppComponent],
+  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

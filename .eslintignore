@@ -1,3 +1,10 @@
 package.json
 package-lock.json
 dist
+node_modules
+www
+old-android
+plugins
+resources
+android
+server-for-browser/lib

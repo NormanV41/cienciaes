@@ -13,11 +13,7 @@ export class LastEpisodesComponent implements OnInit {
   public id = '';
   public episodes: CienciaesFeedItem[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private programApi: ProgramService,
-    private router: Router
-  ) {}
+  public constructor(private route: ActivatedRoute, private programApi: ProgramService, private router: Router) {}
 
   public ngOnInit() {
     this.route.paramMap.subscribe((params) => {

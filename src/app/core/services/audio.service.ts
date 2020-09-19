@@ -6,7 +6,7 @@ import { Howl } from 'howler';
 })
 export class AudioService {
   private _player = new Howl({ src: '', html5: true });
-  constructor() {}
+  public constructor() {}
 
   public create(src: string) {
     this._player = new Howl({ src, html5: true });

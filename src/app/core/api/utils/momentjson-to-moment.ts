@@ -3,9 +3,7 @@ import { CienciaesFeed, CienciaesFeedItem } from '../models/cienciaes-feed';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment-timezone';
 
-export function momentjsonToMoment<
-  T extends CienciaesFeed | CienciaesFeedItem
->() {
+export function momentjsonToMoment<T extends CienciaesFeed | CienciaesFeedItem>() {
   return (old$: Observable<T[]>) => {
     return old$.pipe(
       map((data) =>
@@ -26,8 +24,6 @@ export function momentjsonToMoment<
   };
 }
 
-function isCienciaesFeed(
-  obj: CienciaesFeed | CienciaesFeedItem
-): obj is CienciaesFeed {
+function isCienciaesFeed(obj: CienciaesFeed | CienciaesFeedItem): obj is CienciaesFeed {
   return (obj as CienciaesFeed).lastBuildDate !== undefined;
 }

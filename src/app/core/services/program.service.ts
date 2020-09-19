@@ -14,7 +14,7 @@ import { filterCienciaesFeed } from '../api/utils/filter';
   providedIn: 'root'
 })
 export class ProgramService {
-  constructor(private storage: StorageService, private saveFeedApi: SaveFeedService) {}
+  public constructor(private storage: StorageService, private saveFeedApi: SaveFeedService) {}
 
   public getAll(filterParam?: Filter) {
     const observables: Array<Observable<CienciaesFeed | null>> = Object.values(Feed).map((el) =>
