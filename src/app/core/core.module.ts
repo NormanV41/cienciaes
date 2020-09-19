@@ -5,6 +5,6 @@ import { HTTP } from '@ionic-native/http/ngx';
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [HTTP],
+  providers: [HTTP]
 })
 export class CoreModule {}

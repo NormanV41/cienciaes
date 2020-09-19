@@ -1,4 +1,7 @@
 ion-content {
+  --padding-top: 2em;
+  --padding-start: 1em;
+  --padding-end: 1em;
 }
 
 img {
@@ -6,8 +9,18 @@ img {
   float: left;
   border-radius: 25%;
   border: solid;
+  margin-right: 1em;
 }
 
 h2 {
+  margin-block-start: 0;
   font-size: 1.2em;
+}
+
+.pause {
+  position: relative;
+}
+
+ion-button {
+  border: 1px solid;
 }

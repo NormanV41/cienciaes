@@ -1,11 +1,7 @@
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { MethodsService } from '../../services/methods.service';
-import {
-  CienciaesFeedItem,
-  CienciaesFeed,
-  ItemImage
-} from '../models/cienciaes-feed';
+import { CienciaesFeedItem, CienciaesFeed, ItemImage } from '../models/cienciaes-feed';
 import { Feed } from '../url';
 
 const methods = new MethodsService();
@@ -14,15 +10,10 @@ export function feedParser(feed: Feed) {
   return (old$: Observable<string>) => {
     return old$.pipe(
       map((data) => {
-        const domParser = new window.DOMParser().parseFromString(
-          data,
-          'text/xml'
-        );
+        const domParser = new window.DOMParser().parseFromString(data, 'text/xml');
         const items = Array.from(domParser.querySelectorAll('item'));
 
-        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el, index) =>
-          parseItem(el, domParser, feed, index)
-        );
+        const cienciaesFeedItems = items.map<CienciaesFeedItem>((el, index) => parseItem(el, domParser, feed, index));
 
         const title = domParser.querySelector('title');
         const link = domParser.querySelector('link');
@@ -63,7 +54,8 @@ export function feedParser(feed: Feed) {
         };
         return result;
       }),
-      modifyTitle()
+      modifyTitle(),
+      addSubtitleToItems()
     );
   };
 }
@@ -83,12 +75,26 @@ function modifyTitle() {
   };
 }
 
-function parseItem(
-  el: Element,
-  domParser: Document,
-  feed: Feed,
-  index: number
-): CienciaesFeedItem {
+function addSubtitleToItems() {
+  return (old$: Observable<CienciaesFeed>) => {
+    return old$.pipe(
+      map((data) => {
+        if (data.id === Feed.main) {
+          return data;
+        }
+        const items = data.items.map((item) => {
+          item.subtitle = data.title;
+          return item;
+        });
+        data.items = items;
+        return data;
+      })
+    );
+  };
+}
+
+function parseItem(el: Element, domParser: Document, feed: Feed, index: number): CienciaesFeedItem {
+  let subtitle: string | undefined;
   const enclosure = domParser.querySelector('enclosure');
   if (!enclosure) {
     throw new Error('enclosure is null');
@@ -109,6 +115,15 @@ function parseItem(
   ) {
     throw new Error('something is null');
   }
+  if (feed === Feed.main) {
+    const titleArray = itemTitle.innerHTML.split(' - ');
+    if (titleArray.length !== 2) {
+      console.log(itemTitle.innerHTML, titleArray);
+      throw new Error('not handled');
+    }
+    itemTitle.innerHTML = titleArray[0];
+    subtitle = titleArray[1];
+  }
   return {
     id: `${feed}-${index}`,
     url: itemUrl,
@@ -116,13 +131,12 @@ function parseItem(
     title: itemTitle.innerHTML,
     description: parseItemDescription(itemDescription.innerHTML),
     link: itemLink.innerHTML,
-    pubDate: methods.parseDate(itemPubDate.innerHTML)
+    pubDate: methods.parseDate(itemPubDate.innerHTML),
+    subtitle
   };
 }
 
-function parseItemDescription(
-  description: string
-): { img: ItemImage; paragraph: string } {
+function parseItemDescription(description: string): { img: ItemImage; paragraph: string } {
   let url = '';
   let imageClass = '';
   let alt = '';

@@ -1,21 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button text="Regresar"></ion-back-button
-    ></ion-buttons>
+    <ion-buttons slot="start"> <ion-back-button text="Regresar"></ion-back-button></ion-buttons>
     <ion-title>Cienciaes</ion-title>
     <ion-buttons slot="end"
-      ><ion-button routerLink="/" routerDirection="root"
-        ><ion-icon name="home"></ion-icon
-      ></ion-button>
+      ><ion-button routerLink="/" routerDirection="root"><ion-icon name="home"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <img
-    [src]="episode?.description.img.url"
-    [alt]="episode?.description.img.alt"
-  />
+  <img [src]="episode?.description.img.url" [alt]="episode?.description.img.alt" />
   <h2>{{ episode?.title }}</h2>
-  <h6></h6>
+  <h6 *ngIf="episode?.subtitle">{{ episode?.subtitle }}</h6>
+  <p>{{ episode?.pubDate | amDateFormat: 'DD-MM-YYYY' }}</p>
+  <div [innerHtml]="paragraph"></div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start"
+      ><ion-button #play (click)="togglePlayer()"><ion-icon name="play-circle-outline"></ion-icon></ion-button
+      ><ion-button (click)="togglePlayer()" class="pause"><ion-icon name="pause-circle-outline"></ion-icon></ion-button
+    ></ion-buttons>
+  </ion-toolbar>
+</ion-footer>

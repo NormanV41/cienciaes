@@ -21,6 +21,7 @@ export interface CienciaesFeedItem {
   link: string;
   description: { img: ItemImage; paragraph: string };
   pubDate: Moment;
+  subtitle?: string;
 }
 
 export enum MIMEType {
