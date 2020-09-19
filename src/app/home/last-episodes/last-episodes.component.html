@@ -2,14 +2,8 @@
   <ion-list-header>
     <ion-label>Últimos Episodios</ion-label>
   </ion-list-header>
-  <ion-item
-    *ngFor="let episode of episodes"
-    button
-    (click)="onClick(episode.id)"
-    ><img
-      [src]="episode.description.img.url"
-      [alt]="episode.description.img.alt"
-    />
+  <ion-item *ngFor="let episode of episodes" button (click)="onClick(episode.id)"
+    ><img [src]="episode.description.img.url" [alt]="episode.description.img.alt" />
     <h4>{{ episode.title }}</h4>
   </ion-item>
 </ion-list>
